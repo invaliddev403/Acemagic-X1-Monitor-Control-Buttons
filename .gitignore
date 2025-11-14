@@ -1,0 +1,11 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# PyInstaller artifacts
+build/
+dist/
+*.spec
+
+# Executables (Optional: You might want to commit the EXE if using this as a release repo)
+*.exe
