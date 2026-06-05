@@ -1,9 +1,9 @@
-# HT66FB540 ICP Wiring & Programmer Notes
+# HT66FB542 ICP Wiring & Programmer Notes
 
-Goal: read and backup the HT66FB540 flash firmware before making modifications.
+Goal: read and backup the HT66FB542 flash firmware before making modifications.
 
 ## Chip
-- HT66FB540, 28-pin SSOP-A package
+- HT66FB542, 24-pin SSOP-A package
 - Datasheet: `HT66FB540_542_550_560v210.pdf` (Rev 2.10, March 2026)
 
 ## Programmer / Adapter
@@ -19,24 +19,26 @@ OCDS adapter pinout (5-pin):
 
 ## Use ICP Mode (not OCDS) to Read Flash
 
-OCDS is only for the HT66VB540 EV emulator chip — it does NOT work directly on the HT66FB540.
-To read/write the HT66FB540 flash, use **ICP (In-Circuit Programming)** mode.
+OCDS is only for the HT66VB542 EV emulator chip — it does NOT work directly on the HT66FB542.
+To read/write the HT66FB542 flash, use **ICP (In-Circuit Programming)** mode.
 
-## ICP Wiring — Adapter → 28-pin SSOP Chip
+## ICP Wiring — Adapter → 24-pin SSOP Chip
 
-| Adapter Pin | Signal    | Chip Pin | Chip Pin Name     |
-|-------------|-----------|----------|-------------------|
-| 1 (VDD)     | Power     | Pin 8    | UBUS/PE1/AVDD/VDD |
-| 2 (RESB)    | ICP Clock | Pin 13   | RES/OCDSCK/ICPCK  |
-| 3 (NC)      | —         | —        | —                 |
-| 4 (SDA)     | ICP Data  | Pin 5    | UDN/GPIO0/ICPDA   |
-| 5 (GND)     | Ground    | Pin 10   | VSS               |
+| Adapter Pin | Signal    | Chip Pin | Chip Pin Name    |
+|-------------|-----------|----------|------------------|
+| 1 (VDD)     | Power     | Pin 7    | PE1/UBUS/VDD     |
+| 1 (VDD)     | Power     | Pin 8    | HVDD             |
+| 2 (RESB)    | ICP Clock | Pin 10   | RES/OCDSCK/ICPCK |
+| 3 (NC)      | —         | —        | —                |
+| 4 (SDA)     | ICP Data  | Pin 4    | UDN/GPIO0/ICPDA  |
+| 5 (GND)     | Ground    | Pin 9    | VSS              |
 
-> **Note:** In ICP mode, adapter "SDA" goes to chip Pin 5 (UDN/ICPDA) — NOT pin 4 (OCDSDA).
+> **Note:** In ICP mode, adapter "SDA" goes to chip Pin 4 (UDN/ICPDA) — NOT pin 3 (OCDSDA).
+> Both VDD pins must be supplied: Pin 7 (PE1/UBUS/VDD) is the main MCU supply; Pin 8 (HVDD) powers the HIRC oscillator. Both connect to the programmer's VDD rail.
 
 ## Hardware Cautions
 
-- During programming, UDN (pin 5) and RES (pin 13) are taken over by the programmer — isolate from other circuitry on the board.
+- During programming, UDN (pin 4) and RES (pin 10) are taken over by the programmer — isolate from other circuitry on the board.
 - Put a **>300Ω resistor** (or <1nF cap) in series on the RES line between the programmer and any other circuitry tied to reset.
 
 ## Software
